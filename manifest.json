@@ -1,0 +1,16 @@
+{
+	"BundleType": "Application",
+	"BundleIdentifier": "libraryorder",
+	"AppIcon": {
+		"36x18": "tutorial.png"
+	},
+	"AppName": {
+		"en": "LibraryOrder"
+	},
+	"SupportedLanguages": [
+		"en"
+	],
+	"RequiredPermissions": [
+		"http://ajax.googleapis.com"
+	]
+}
