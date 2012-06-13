@@ -4,19 +4,15 @@ h1 {
 	padding: 20px;
 }
 
-div#ArtistsView {
+td#ArtistsView {
 	width:700px;
-	height:900px;
-	float: left;
 }
 
-div#AlbumsView {
+td#AlbumsView {
 	width:700px;
-	height:900px;
-	float: right;
+	height:500px;
 }
 
-div#SongsView {
-	width:auto;
+td#SongsView {
 	height:200px;
 }

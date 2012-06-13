@@ -9,15 +9,20 @@
 	 <script type="text/javascript" src="/jquery-1.7.2.min.js"></script>
 </head>
 <body onload="sp = getSpotifyApi(1); libraryorder = sp.require('libraryorder'); libraryorder.init();">
-<h1 id="header">Hello, world!</h1>
-<div id='ArtistsView'>
-	<ul id ='ArtistsList'></ul>
-</div>
-<div id='AlbumsView'>
-	<ul id ='AlbumsList'></ul> 
-</div>
-<div id='SongsView'>
-	<ul id ='SongsList'></ul> 
-</div>
+	<table width="1400" border="0">
+		<tr valign="top">
+			<td id ='ArtistsView'>
+				<ol id ='ArtistsList'></ol>
+			</td>
+			<td id = 'AlbumsView'>
+				<ol id ='AlbumsList'></ol> 
+			</td>
+		</tr>
+		<tr>
+			<td id = 'SongsView' colspan="2">
+				<ol id ='SongsList'></ol> 
+			</td>
+		</tr>
+	</table>
 </body>
 </html>
