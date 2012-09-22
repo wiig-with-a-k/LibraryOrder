@@ -9,14 +9,16 @@ function init() {
 	console.log('init');
 	
 	fillViewWithData($('#ArtistsList'), library.artists);
-	fillViewWithData($('#AlbumsList'), library.albums);
-	fillViewWithData($('#SongsList'), library.tracks);
+	//fillViewWithData($('#AlbumsList'), library.albums);
+	//fillViewWithData($('#SongsList'), library.tracks);
 }
 
 function fillViewWithData (view, data) {
+  data.sort();
+
   for(var i=0; i<data.length; i++) {
 		console.log(data[i].name);
-		
-		view.append('<li>' + data[i].name + '</li>');
+
+		view.append('<li>' + data[i].name + '</li>');	
 	}
 }
