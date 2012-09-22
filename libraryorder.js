@@ -9,8 +9,8 @@ function init() {
 	console.log('init');
 	
 	fillViewWithData($('#ArtistsList'), library.artists);
-	addClickEventToList($('#ArtistsList'));
-	//fillViewWithData($('#AlbumsList'), library.albums);
+	addClickEventToList($('#ArtistsList'), filterAlbumsList);
+	fillViewWithData($('#AlbumsList'), library.albums);
 	//fillViewWithData($('#SongsList'), library.tracks);
 }
 
@@ -24,12 +24,21 @@ function fillViewWithData (view, data) {
 	}
 }
 
- function addClickEventToList (list) {
+ function addClickEventToList (list, clickCallback) {
  	list.delegate('li', 'click', function () {
     	console.log('clicked: '+ $(this).text());
+    	clickCallback($(this).text());
 	});
 }
 
-function fillAlbumsList (artist) {
-	
+function filterAlbumsList (artist) {
+	$("#AlbumsList li").each(function(){
+     var liText = $(this).text();
+     console.log(liText);
+
+     if ()
+    // if(liText.indexOf(letter) == 0)  
+      //   $(this).show();
+    });     
+
 }
