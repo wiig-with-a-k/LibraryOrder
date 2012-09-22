@@ -9,6 +9,7 @@ function init() {
 	console.log('init');
 	
 	fillViewWithData($('#ArtistsList'), library.artists);
+	addClickEventToList($('#ArtistsList'));
 	//fillViewWithData($('#AlbumsList'), library.albums);
 	//fillViewWithData($('#SongsList'), library.tracks);
 }
@@ -21,4 +22,14 @@ function fillViewWithData (view, data) {
 
 		view.append('<li>' + data[i].name + '</li>');	
 	}
+}
+
+ function addClickEventToList (list) {
+ 	list.delegate('li', 'click', function () {
+    	console.log('clicked: '+ $(this).text());
+	});
+}
+
+function fillAlbumsList (artist) {
+	
 }
