@@ -36,7 +36,7 @@ function filterAlbumsList (artist) {
      var liText = $(this).text();
      console.log(liText);
 
-     if ()
+     
     // if(liText.indexOf(letter) == 0)  
       //   $(this).show();
     });     
