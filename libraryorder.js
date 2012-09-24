@@ -11,7 +11,7 @@ function init() {
 	fillViewWithData($('#ArtistsList'), library.artists);
 	addClickEventToList($('#ArtistsList'), filterAlbumsList);
 	fillViewWithData($('#AlbumsList'), library.albums);
-	//fillViewWithData($('#SongsList'), library.tracks);
+	fillViewWithData($('#SongsList'), library.tracks);
 }
 
 function fillViewWithData (view, data) {

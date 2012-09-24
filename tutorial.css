@@ -3,16 +3,25 @@ h1 {
 	font-size: 24px;
 	padding: 20px;
 }
+td {
+	padding-left: 50px;
+}
 
-td#ArtistsView {
-	width:700px;
+ul#ArtistsList {
+	height: 100%;
+	overflow: auto;
 }
 
 td#AlbumsView {
-	width:700px;
-	height:500px;
+	width: 50%;
 }
 
-td#SongsView {
-	height:200px;
+ul#AlbumsList {
+	height: 100%;
+	overflow: auto;
+}
+
+ul#SongsList {
+	height:100%;
+	overflow: auto;
 }
