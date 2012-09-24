@@ -35,8 +35,8 @@ function onClickedArtist (artist) {
 	var albumsMatchingArtist = getAlbumsMatchingArtist(artist);
 	showOnlyListElementsInList($("#AlbumsList li"), albumsMatchingArtist);
 
-	var tracksMatchingArtist = getTracksMatchingArtist(artist);
-	showOnlyListElementsInList($("#SongsList li"), tracksMatchingArtist);
+	var tracksMatchingAlbum = getTracksMatchingAlbum(albumsMatchingArtist);
+	showOnlyListElementsInList($("#SongsList li"), tracksMatchingAlbum);
 }
 
 function getAlbumsMatchingArtist(artist) {
@@ -46,30 +46,31 @@ function getAlbumsMatchingArtist(artist) {
 	for(var i=0; i<allAlbums.length; i++)	{
 		if (allAlbums[i].artist.name === artist) {
 			console.log('Adding match: ' + allAlbums[i].name);
-			albumsMatchingArtist.push(allAlbums[i].name);
+			albumsMatchingArtist.push(allAlbums[i]);
 		};
 	};	
 
 	return albumsMatchingArtist;
 }
 
-function getTracksMatchingArtist(artist) {
-	var tracksMatchingArtist = [];
-	var allTracks = library.tracks;
-	var artists = [];
+function getTracksMatchingAlbum(albums) {
+	var tracksMatchingAlbum = [];
+	var tracks = [];
 
-	for (var i = allTracks.length - 1; i >= 0; i--) {
-		artists = allTracks[i].artists;
-		for (var j = artists.length - 1; j >= 0; j--) {
-			if(artists[j].name === artist) {
-				console.log('Adding match: ' + allTracks[i].name);
-				tracksMatchingArtist.push(allTracks[i].name);
-			}
-			break;
-		};
+	for (var i = albums.length - 1; i >= 0; i--) {
+		console.log('album: '+ albums[i].uri);
+
+		models.Album.fromURI(albums[i].uri, function (album) {
+			console.log('album loaded: ' + album.name);
+
+			for (var t = album.tracks.length - 1; t >= 0; t--) {
+				 console.log('Adding track match: ' + album.tracks[t].name);
+				 tracksMatchingAlbum.push(album.tracks[t]);
+			};
+		});
 	};
 
-	return tracksMatchingArtist;
+	return tracksMatchingAlbum; //doesent work because fromuri above is async
 }
 
 function showOnlyListElementsInList(listElements, list) {
@@ -79,7 +80,7 @@ function showOnlyListElementsInList(listElements, list) {
      	var liText = liElement.text();
 		
 		for (var i = list.length - 1; i >= 0; i--) {
-			if (liText === list[i]) {
+			if (liText === list[i].name) {
 				match = true;
 				break;
 			};
