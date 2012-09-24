@@ -32,13 +32,43 @@ function fillViewWithData (view, data) {
 }
 
 function filterAlbumsList (artist) {
+	var albumsMatchingArtist = getAlbumsMatchingArtist(artist);
+
+	showOnlyAlbumElementsInList(albumsMatchingArtist);
+}
+
+function getAlbumsMatchingArtist(artist) {
+	var albumsMatchingArtist = [];
+	var allAlbums = library.albums;
+
+	for(var i=0; i<allAlbums.length; i++)	{
+		if (allAlbums[i].artist.name === artist.toString()) {
+			console.log('Adding match: ' + allAlbums[i].name);
+			albumsMatchingArtist.push(allAlbums[i].name);
+		};
+	};	
+
+	return albumsMatchingArtist;
+}
+
+function showOnlyAlbumElementsInList(albumsList) {
 	$("#AlbumsList li").each(function(){
-     var liText = $(this).text();
-     console.log(liText);
+     	var match = false;
+     	var liElement = $(this); 
+     	var liText = liElement.text();
+		
+		for (var i = albumsList.length - 1; i >= 0; i--) {
+			if (liText === albumsList[i]) {
+				match = true;
+				break;
+			};
+		};
 
-     
-    // if(liText.indexOf(letter) == 0)  
-      //   $(this).show();
-    });     
-
+		if(match) {
+			liElement.show();
+		} 
+		else {
+	    	liElement.hide();	 
+		}
+    });
 }
