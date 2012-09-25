@@ -8,14 +8,16 @@ exports.init = init;
 function init() {
 	console.log('init');
 	
-	fillViewWithData($('#ArtistsList'), library.artists);
+	fillViewWithData($('#ArtistsList'), library.artists, true);
 	addClickEventToList($('#ArtistsList'), onClickedArtist);
-	fillViewWithData($('#AlbumsList'), library.albums);
-	fillViewWithData($('#SongsList'), library.tracks);
+	fillViewWithData($('#AlbumsList'), library.albums, true);
+	fillViewWithData($('#SongsList'), library.tracks, false);
 }
 
-function fillViewWithData (view, data) {
-  data.sort();
+function fillViewWithData (view, data, sort) {
+  if (sort) {
+  	data.sort();
+  };
 
   for(var i=0; i<data.length; i++) {
 		console.log(data[i].name);
@@ -46,7 +48,7 @@ function getAlbumsMatchingArtist(artist) {
 	for(var i=0; i<allAlbums.length; i++)	{
 		if (allAlbums[i].artist.name === artist) {
 			console.log('Adding match: ' + allAlbums[i].name);
-			albumsMatchingArtist.push(allAlbums[i].name);
+			albumsMatchingArtist.push(allAlbums[i]);
 		};
 	};	
 
@@ -63,7 +65,7 @@ function getTracksMatchingArtist(artist) {
 		for (var j = artists.length - 1; j >= 0; j--) {
 			if(artists[j].name === artist) {
 				console.log('Adding match: ' + allTracks[i].name);
-				tracksMatchingArtist.push(allTracks[i].name);
+				tracksMatchingArtist.push(allTracks[i]);
 			}
 			break;
 		};
@@ -79,7 +81,7 @@ function showOnlyListElementsInList(listElements, list) {
      	var liText = liElement.text();
 		
 		for (var i = list.length - 1; i >= 0; i--) {
-			if (liText === list[i]) {
+			if (liText === list[i].name) {
 				match = true;
 				break;
 			};
