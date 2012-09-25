@@ -9,8 +9,11 @@ function init() {
 	console.log('init');
 	
 	fillViewWithData($('#ArtistsList'), library.artists, true);
-	addClickEventToList($('#ArtistsList'), onClickedArtist);
+	addClickEventToList($('#ArtistsList'), onClickedArtist, 1);
+	
 	fillViewWithData($('#AlbumsList'), library.albums, true);
+	addClickEventToList($('#AlbumsList'), onDoubleClickedAlbum, 2);
+
 	fillViewWithData($('#SongsList'), library.tracks, false);
 }
 
@@ -26,9 +29,17 @@ function fillViewWithData (view, data, sort) {
 	}
 }
 
- function addClickEventToList (list, clickCallback) {
- 	list.delegate('li', 'click', function () {
-    	console.log('clicked: '+ $(this).text());
+ function addClickEventToList (list, clickCallback, numberOfClicks) {
+ 	var click;
+
+ 	if (numberOfClicks === 1) {
+ 		click = 'click';
+ 	} else {
+ 		click = 'dblclick';
+ 	};
+
+ 	list.delegate('li', click, function () {
+    	console.log(click + 'clicked: '+ $(this).text());
     	clickCallback($(this).text().toString());
 	});
 }
@@ -39,6 +50,10 @@ function onClickedArtist (artist) {
 
 	var tracksMatchingArtist = getTracksMatchingArtist(artist);
 	showOnlyListElementsInList($("#SongsList li"), tracksMatchingArtist);
+}
+
+function onDoubleClickedAlbum (album) {
+	console.log(album);
 }
 
 function getAlbumsMatchingArtist(artist) {
