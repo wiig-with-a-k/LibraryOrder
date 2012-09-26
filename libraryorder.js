@@ -8,14 +8,19 @@ exports.init = init;
 function init() {
 	console.log('init');
 	
-	fillViewWithData($('#ArtistsList'), library.artists);
-	addClickEventToList($('#ArtistsList'), onClickedArtist);
-	fillViewWithData($('#AlbumsList'), library.albums);
-	fillViewWithData($('#SongsList'), library.tracks);
+	fillViewWithData($('#ArtistsList'), library.artists, true);
+	addClickEventToList($('#ArtistsList'), onClickedArtist, 1);
+	
+	fillViewWithData($('#AlbumsList'), library.albums, true);
+	addClickEventToList($('#AlbumsList'), onDoubleClickedAlbum, 2);
+
+	fillViewWithData($('#SongsList'), library.tracks, false);
 }
 
-function fillViewWithData (view, data) {
-  data.sort();
+function fillViewWithData (view, data, sort) {
+  if (sort) {
+  	data.sort();
+  };
 
   for(var i=0; i<data.length; i++) {
 		console.log(data[i].name);
@@ -24,9 +29,17 @@ function fillViewWithData (view, data) {
 	}
 }
 
- function addClickEventToList (list, clickCallback) {
- 	list.delegate('li', 'click', function () {
-    	console.log('clicked: '+ $(this).text());
+ function addClickEventToList (list, clickCallback, numberOfClicks) {
+ 	var click;
+
+ 	if (numberOfClicks === 1) {
+ 		click = 'click';
+ 	} else {
+ 		click = 'dblclick';
+ 	};
+
+ 	list.delegate('li', click, function () {
+    	console.log(click + 'clicked: '+ $(this).text());
     	clickCallback($(this).text().toString());
 	});
 }
@@ -37,6 +50,38 @@ function onClickedArtist (artist) {
 
 	var tracksMatchingAlbum = getTracksMatchingAlbum(albumsMatchingArtist);
 	showOnlyListElementsInList($("#SongsList li"), tracksMatchingAlbum);
+}
+
+function onDoubleClickedAlbum (album) {
+	console.log(album);
+
+	var loadedAlbum = loadAlbum(album);
+}
+
+function loadAlbum (album) {
+	var libraryAlbum = getAlbumFromLibrary(album);
+
+	loadAlbumFromBackend(libraryAlbum);
+}
+
+function getAlbumFromLibrary (album) {
+	var allAlbums = library.albums;
+
+	for(var i=0; i<allAlbums.length; i++)	{
+		if (allAlbums[i].name === album) {
+			console.log('Adding matched album: ' + allAlbums[i].name);
+			
+			return allAlbums[i];
+		};
+	};	
+}
+
+function loadAlbumFromBackend (album) {
+	models.Album.fromURI(album.uri, function (album) {
+		console.log('album loaded: ' + album.name);
+
+		player.play(album.get(0), album);
+	});
 }
 
 function getAlbumsMatchingArtist(artist) {
@@ -53,24 +98,23 @@ function getAlbumsMatchingArtist(artist) {
 	return albumsMatchingArtist;
 }
 
-function getTracksMatchingAlbum(albums) {
-	var tracksMatchingAlbum = [];
-	var tracks = [];
+function getTracksMatchingArtist(artist) {
+	var tracksMatchingArtist = [];
+	var allTracks = library.tracks;
+	var artists = [];
 
-	for (var i = albums.length - 1; i >= 0; i--) {
-		console.log('album: '+ albums[i].uri);
-
-		models.Album.fromURI(albums[i].uri, function (album) {
-			console.log('album loaded: ' + album.name);
-
-			for (var t = album.tracks.length - 1; t >= 0; t--) {
-				 console.log('Adding track match: ' + album.tracks[t].name);
-				 tracksMatchingAlbum.push(album.tracks[t]);
-			};
-		});
+	for (var i = allTracks.length - 1; i >= 0; i--) {
+		artists = allTracks[i].artists;
+		for (var j = artists.length - 1; j >= 0; j--) {
+			if(artists[j].name === artist) {
+				console.log('Adding match: ' + allTracks[i].name);
+				tracksMatchingArtist.push(allTracks[i]);
+			}
+			break;
+		};
 	};
 
-	return tracksMatchingAlbum; //doesent work because fromuri above is async
+	return tracksMatchingArtist;
 }
 
 function showOnlyListElementsInList(listElements, list) {
