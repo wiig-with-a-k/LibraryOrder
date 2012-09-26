@@ -54,6 +54,34 @@ function onClickedArtist (artist) {
 
 function onDoubleClickedAlbum (album) {
 	console.log(album);
+
+	var loadedAlbum = loadAlbum(album);
+}
+
+function loadAlbum (album) {
+	var libraryAlbum = getAlbumFromLibrary(album);
+
+	loadAlbumFromBackend(libraryAlbum);
+}
+
+function getAlbumFromLibrary (album) {
+	var allAlbums = library.albums;
+
+	for(var i=0; i<allAlbums.length; i++)	{
+		if (allAlbums[i].name === album) {
+			console.log('Adding matched album: ' + allAlbums[i].name);
+			
+			return allAlbums[i];
+		};
+	};	
+}
+
+function loadAlbumFromBackend (album) {
+	models.Album.fromURI(album.uri, function (album) {
+		console.log('album loaded: ' + album.name);
+
+		player.play(album.get(0), album);
+	});
 }
 
 function getAlbumsMatchingArtist(artist) {
