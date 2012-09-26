@@ -8,13 +8,23 @@ exports.init = init;
 function init() {
 	console.log('init');
 	
-	fillViewWithData($('#ArtistsList'), library.artists, true);
+	fillViewWithData($('#ArtistsList'), getArtistsFromAlbums(library.albums), true);
 	addClickEventToList($('#ArtistsList'), onClickedArtist, 1);
 	
 	fillViewWithData($('#AlbumsList'), library.albums, true);
 	addClickEventToList($('#AlbumsList'), onDoubleClickedAlbum, 2);
 
 	fillViewWithData($('#SongsList'), library.tracks, false);
+}
+
+function getArtistsFromAlbums (albums) {
+	var artists = [];
+
+	for (var i = albums.length - 1; i >= 0; i--) {
+		artists.push(albums[i].artist);
+	};
+
+	return artists;
 }
 
 function fillViewWithData (view, data, sort) {
