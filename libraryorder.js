@@ -48,20 +48,20 @@ function onClickedArtist (artist) {
 	var albumsMatchingArtist = getAlbumsMatchingArtist(artist);
 	showOnlyListElementsInList($("#AlbumsList li"), albumsMatchingArtist);
 
-	var tracksMatchingAlbum = getTracksMatchingAlbum(albumsMatchingArtist);
-	showOnlyListElementsInList($("#SongsList li"), tracksMatchingAlbum);
+	var tracksMatchingArtist = getTracksMatchingArtist(artist);
+	showOnlyListElementsInList($("#SongsList li"), tracksMatchingArtist);
 }
 
 function onDoubleClickedAlbum (album) {
 	console.log(album);
 
-	var loadedAlbum = loadAlbum(album);
+	loadAlbum(album);
 }
 
 function loadAlbum (album) {
 	var libraryAlbum = getAlbumFromLibrary(album);
 
-	loadAlbumFromBackend(libraryAlbum);
+	playAlbum(libraryAlbum);
 }
 
 function getAlbumFromLibrary (album) {
@@ -76,9 +76,9 @@ function getAlbumFromLibrary (album) {
 	};	
 }
 
-function loadAlbumFromBackend (album) {
+function playAlbum (album) {
 	models.Album.fromURI(album.uri, function (album) {
-		console.log('album loaded: ' + album.name);
+		console.log('album loaded from backend: ' + album.name);
 
 		player.play(album.get(0), album);
 	});
