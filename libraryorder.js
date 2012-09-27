@@ -67,7 +67,6 @@ function onClickedArtist (artist) {
 
 function onDoubleClickedSong (song) {
 	var libraryTrack = getMatchingFromLibrary(song, library.tracks);
-
 	playTrack(libraryTrack);
 }
 
@@ -78,7 +77,6 @@ function onClickedAlbum (album) {
 
 function onDoubleClickedAlbum (album) {
 	var libraryAlbum = getMatchingFromLibrary(album, library.albums);
-
 	loadAlbum(libraryAlbum, playAlbum);
 }
 
@@ -109,10 +107,8 @@ function playTrack (track) {
 	player.play(track);
 }
 
-function filterTracksByAlbum (album) {
-	var songsList = $('#SongsList');
-	songsList.empty()
-	fillViewWithData(songsList, album.tracks, false);
+function filterTracksByAlbum (loadedAlbum) {
+	showOnlyListElementsInList($("#SongsList li"), loadedAlbum.tracks);
 }
 
 function getAlbumsMatchingArtist(artist) {
@@ -149,6 +145,7 @@ function getTracksMatchingArtist(artist) {
 }
 
 function showOnlyListElementsInList(listElements, list) {
+	console.log('# list elements: ' + listElements.length + ' list match: ' + list.length);
 	listElements.each(function(){
      	var match = false;
      	var liElement = $(this); 
@@ -156,6 +153,7 @@ function showOnlyListElementsInList(listElements, list) {
 		
 		for (var i = list.length - 1; i >= 0; i--) {
 			if (liText === list[i].name) {
+				console.log('Element match found: ' + liText);
 				match = true;
 				break;
 			};
