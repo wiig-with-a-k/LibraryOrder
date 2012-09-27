@@ -11,8 +11,10 @@ function init() {
 	fillViewWithData($('#ArtistsList'), getArtistsFromAlbums(library.albums), true);
 	addClickEventToList($('#ArtistsList'), onClickedArtist, 1);
 	
-	fillViewWithData($('#AlbumsList'), library.albums, true);
-	addClickEventToList($('#AlbumsList'), onDoubleClickedAlbum, 2);
+	var albumsList = $('#AlbumsList');
+	fillViewWithData(albumsList, library.albums, true);
+	addClickEventToList(albumsList, onClickedAlbum, 1);
+	addClickEventToList(albumsList, onDoubleClickedAlbum, 2);
 
 	fillViewWithData($('#SongsList'), library.tracks, false);
 	addClickEventToList($('#SongsList'), onDoubleClickedSong, 2);
@@ -63,22 +65,21 @@ function onClickedArtist (artist) {
 	showOnlyListElementsInList($("#SongsList li"), tracksMatchingArtist);
 }
 
-function onDoubleClickedAlbum (album) {
-	console.log(album);
-
-	loadAlbum(album);
-}
-
 function onDoubleClickedSong (song) {
 	var libraryTrack = getMatchingFromLibrary(song, library.tracks);
 
 	playTrack(libraryTrack);
 }
 
-function loadAlbum (album) {
+function onClickedAlbum (album) {
+	var libraryAlbum = getMatchingFromLibrary(album, library.albums);
+	loadAlbum(libraryAlbum, filterTracksByAlbum);
+}
+
+function onDoubleClickedAlbum (album) {
 	var libraryAlbum = getMatchingFromLibrary(album, library.albums);
 
-	playAlbum(libraryAlbum);
+	loadAlbum(libraryAlbum, playAlbum);
 }
 
 function getMatchingFromLibrary (name, library) {
@@ -91,17 +92,27 @@ function getMatchingFromLibrary (name, library) {
 	};	
 }
 
-function playAlbum (album) {
+function loadAlbum (album, callback) {	
 	models.Album.fromURI(album.uri, function (album) {
 		console.log('album loaded from backend: ' + album.name);
-
-		player.play(album.get(0), album);
+		callback(album);
 	});
+}
+
+function playAlbum (album) {
+	console.log('Playing album: ' + album);
+	player.play(album.get(0), album);
 }
 
 function playTrack (track) {
 	console.log('Playing track: '+ track);
 	player.play(track);
+}
+
+function filterTracksByAlbum (album) {
+	var songsList = $('#SongsList');
+	songsList.empty()
+	fillViewWithData(songsList, album.tracks, false);
 }
 
 function getAlbumsMatchingArtist(artist) {
