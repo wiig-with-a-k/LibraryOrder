@@ -15,6 +15,7 @@ function init() {
 	addClickEventToList($('#AlbumsList'), onDoubleClickedAlbum, 2);
 
 	fillViewWithData($('#SongsList'), library.tracks, false);
+	addClickEventToList($('#SongsList'), onDoubleClickedSong, 2);
 }
 
 function getArtistsFromAlbums (albums) {
@@ -49,7 +50,7 @@ function fillViewWithData (view, data, sort) {
  	};
 
  	list.delegate('li', click, function () {
-    	console.log(click + 'clicked: '+ $(this).text());
+    	console.log(click + ' : '+ $(this).text());
     	clickCallback($(this).text().toString());
 	});
 }
@@ -68,20 +69,24 @@ function onDoubleClickedAlbum (album) {
 	loadAlbum(album);
 }
 
+function onDoubleClickedSong (song) {
+	var libraryTrack = getMatchingFromLibrary(song, library.tracks);
+
+	playTrack(libraryTrack);
+}
+
 function loadAlbum (album) {
-	var libraryAlbum = getAlbumFromLibrary(album);
+	var libraryAlbum = getMatchingFromLibrary(album, library.albums);
 
 	playAlbum(libraryAlbum);
 }
 
-function getAlbumFromLibrary (album) {
-	var allAlbums = library.albums;
-
-	for(var i=0; i<allAlbums.length; i++)	{
-		if (allAlbums[i].name === album) {
-			console.log('Adding matched album: ' + allAlbums[i].name);
+function getMatchingFromLibrary (name, library) {
+	for(var i=0; i<library.length; i++)	{
+		if (library[i].name === name) {
+			console.log('Adding match: ' + library[i].name);
 			
-			return allAlbums[i];
+			return library[i];
 		};
 	};	
 }
@@ -92,6 +97,11 @@ function playAlbum (album) {
 
 		player.play(album.get(0), album);
 	});
+}
+
+function playTrack (track) {
+	console.log('Playing track: '+ track);
+	player.play(track);
 }
 
 function getAlbumsMatchingArtist(artist) {
