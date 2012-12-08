@@ -31,14 +31,32 @@ function getArtistsFromAlbums (albums) {
 }
 
 function fillViewWithData (view, data, sort) {
+  var alreadyAddedList = [];
+  var match = false;
+
   if (sort) {
   	data.sort();
   };
 
   for(var i=0; i<data.length; i++) {
-		console.log(data[i].name);
+		var name = data[i].name;
+		console.log('Adding: ' + name + ' to view');
 
-		view.append('<li>' + data[i].name + '</li>');	
+		match = false;
+
+		for (var j = alreadyAddedList.length - 1; j >= 0; j--) {
+			if (alreadyAddedList[j] === name) {
+				match = true;
+				console.log(name + ' already added');
+				break;
+			};
+			
+		};
+
+		if (match === false) {
+			view.append('<li>' + name + '</li>');
+			alreadyAddedList.push(name);	
+		};
 	}
 }
 
@@ -117,7 +135,7 @@ function getAlbumsMatchingArtist(artist) {
 
 	for(var i=0; i<allAlbums.length; i++)	{
 		if (allAlbums[i].artist.name === artist) {
-			console.log('Adding match: ' + allAlbums[i].name);
+			console.log('Adding album match: ' + allAlbums[i].name);
 			albumsMatchingArtist.push(allAlbums[i]);
 		};
 	};	
@@ -134,7 +152,7 @@ function getTracksMatchingArtist(artist) {
 		artists = allTracks[i].artists;
 		for (var j = artists.length - 1; j >= 0; j--) {
 			if(artists[j].name === artist) {
-				console.log('Adding match: ' + allTracks[i].name);
+				console.log('Adding track match: ' + allTracks[i].name);
 				tracksMatchingArtist.push(allTracks[i]);
 			}
 			break;
@@ -146,6 +164,7 @@ function getTracksMatchingArtist(artist) {
 
 function showOnlyListElementsInList(listElements, list) {
 	console.log('# list elements: ' + listElements.length + ' list match: ' + list.length);
+	
 	listElements.each(function(){
      	var match = false;
      	var liElement = $(this); 

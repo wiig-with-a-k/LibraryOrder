@@ -25,3 +25,7 @@ ul#SongsList {
 	height:100%;
 	overflow: auto;
 }
+
+li:active {
+	background-color:red;
+}
