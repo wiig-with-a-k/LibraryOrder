@@ -18,6 +18,8 @@ function init() {
 
 	fillViewWithData($('#SongsList'), library.tracks, false);
 	addClickEventToList($('#SongsList'), onDoubleClickedSong, 2);
+
+	addSongChangedEvent();
 }
 
 function getArtistsFromAlbums (albums) {
@@ -86,6 +88,8 @@ function onClickedArtist (artist) {
 function onDoubleClickedSong (song) {
 	var libraryTrack = getMatchingFromLibrary(song, library.tracks);
 	playTrack(libraryTrack);
+
+	markSongAsPlaying(song);
 }
 
 function onClickedAlbum (album) {
@@ -185,4 +189,29 @@ function showOnlyListElementsInList(listElements, list) {
 	    	liElement.hide();	 
 		}
     });
+}
+
+function addSongChangedEvent () {
+	player.observe(models.EVENT.CHANGE, function(event) {
+		if (event.data.curtrack === true) {
+			console.log('Track changed: ' + player.track.name);
+
+			$('#SongsList li:visible.selected').each(function () {
+				if ($(this).text() !== player.track.name) {
+					$(this).removeClass('selected');
+				};
+			});
+
+			markSongAsPlaying(player.track.name);
+		};
+	});
+}
+
+function markSongAsPlaying(song) {
+	$("#SongsList li:visible").each(function () {
+		if (song === $(this).text()) {
+			$(this).addClass('selected');
+			console.log('Selected class added to: ' + $(this).text());
+		};
+	});	
 }

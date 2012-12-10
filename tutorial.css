@@ -26,6 +26,14 @@ ul#SongsList {
 	overflow: auto;
 }
 
+li:hover {
+	background-color: #FF3300;
+}
+
 li:active {
 	background-color:red;
+}
+
+.selected {
+	background-color: #FF3300;
 }
