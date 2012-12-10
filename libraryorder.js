@@ -87,9 +87,7 @@ function onClickedArtist (artist) {
 
 function onDoubleClickedSong (song) {
 	var libraryTrack = getMatchingFromLibrary(song, library.tracks);
-	playTrack(libraryTrack);
-
-	markSongAsPlaying(song);
+	loadAlbum(libraryTrack.album, playAlbum, libraryTrack.number-1);
 }
 
 function onClickedAlbum (album) {
@@ -112,21 +110,16 @@ function getMatchingFromLibrary (name, library) {
 	};	
 }
 
-function loadAlbum (album, callback) {	
+function loadAlbum (album, callback, callbackArgs) {	
 	models.Album.fromURI(album.uri, function (album) {
 		console.log('album loaded from backend: ' + album.name);
-		callback(album);
+		callback(album, callbackArgs);
 	});
 }
 
-function playAlbum (album) {
-	console.log('Playing album: ' + album);
-	player.play(album.get(0), album);
-}
-
-function playTrack (track) {
-	console.log('Playing track: '+ track);
-	player.play(track);
+function playAlbum (album, startIndex) {
+	console.log('Playing album: ' + album + ' startIndex: ' + startIndex);
+	player.play(album.get(startIndex), album);
 }
 
 function filterTracksByAlbum (loadedAlbum) {
@@ -168,13 +161,14 @@ function getTracksMatchingArtist(artist) {
 
 function showOnlyListElementsInList(listElements, list) {
 	console.log('# list elements: ' + listElements.length + ' list match: ' + list.length);
-	
+	var match, liElement, liText, i;
+
 	listElements.each(function(){
-     	var match = false;
-     	var liElement = $(this); 
-     	var liText = liElement.text();
+     	match = false;
+     	liElement = $(this); 
+     	liText = liElement.text();
 		
-		for (var i = list.length - 1; i >= 0; i--) {
+		for (i = list.length - 1; i >= 0; i--) {
 			if (liText === list[i].name) {
 				console.log('Element match found: ' + liText);
 				match = true;
